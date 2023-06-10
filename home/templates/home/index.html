@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load filter %}
+{% load render_partial %}
+{% load social_share %}
+{% block title %}
+    home
+{% endblock %}
+
+{% block contact %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="main-banner header-text">
+        <div class="container-fluid">
+            <div class="owl-banner owl-carousel">
+                {% for article in article %}
+                    <div class="item">
+                        <img width="280px" height="300px" src="{{ article.image.url }}" alt="">
+                        <div class="item-content">
+                            <div class="main-content">
+                                <div class="meta-category">
+                                    <span>{{ article.category.first.title }}</span>
+                                </div>
+                                <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                <ul class="post-info">
+                                    <li><a href="#">{{ article.author }}</a></li>
+                                    <li><a href="#">{{ article.created }}</a></li>
+                                    <li><a href="#">{{ article.comments.count }} Comment</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <!-- Banner Ends Here -->
+
+    <section class="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <span>Stand Blog HTML5 Template</span>
+                                <h4>Creative HTML Template For Bloggers!</h4>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="main-button">
+                                    <a rel="nofollow" href="https://templatemo.com/tm-551-stand-blog" target="_parent">Download
+                                        Now!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="blog-posts">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            {% for article in recent_post %}
+                                <div class="col-lg-12">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img src="{{ article.image.url }}" alt="">
+                                        </div>
+                                        <div class="down-content">
+                                            <span>{{ article.category.first }}</span>
+                                            <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                            <ul class="post-info">
+                                                <li><a href="#">{{ article.author.get_full_name }}</a></li>
+                                                <li><a href="#">{{ article.created }}</a></li>
+                                                <li><a href="#">{{ article.comments.count }} Comment</a></li>
+                                            </ul>
+                                            <p>{{ article.body|cutter:50 }}</p>
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <ul class="post-tags">
+                                                            <li><i class="fa fa-tags"></i></li>
+                                                            {% for cat in category %}
+                                                                <li><a href="#">{{ cat }}</a>,</li>
+                                                            {% endfor %}
+
+
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <ul class="post-share">
+                                                            <li><i class="fa fa-share-alt"></i></li>
+                                                            <li>
+                                                                {% post_to_telegram "Telegram" article.get_absolute_url %}
+                                                            </li>
+                                                            <li>{% post_to_whatsapp article.get_absolute_url "Whatsapp" %}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                            <div class="col-lg-12">
+                                <div class="main-button">
+                                    <a href="{% url "blog:article_post" %}">View All Posts</a>
+                                    <div class="form-outline datetimepicker">
+                                        <label for="datetimepickerExample" class="form-label"
+                                        >{% current_time "%Y-%m-%d" %}</label
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% render_partial "home:sidebar" %}
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+

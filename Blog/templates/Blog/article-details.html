@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+<!-- Page Content -->
+<!-- Banner Starts Here -->
+{% block title %}
+    Page Detail
+{% endblock %}
+{% block detail %}
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>{{ article.category.first.title }}</h4>
+                            <h2>{{ article.title }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="blog-post">
+                                    <div class="blog-thumb">
+                                        <img style="width: 600px;height: 350px" src="{{ article.image.url }}" alt="">
+                                    </div>
+                                    <div class="down-content">
+
+                                        <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                        <a href="{% url "blog:article_detail" article.slug %}">
+                                            <h4>{{ article.title }}</h4></a>
+                                        <ul class="post-info">
+                                            <li><a href="#">{{ article.auther }} </a></li>
+                                            <li><a href="#">{{ article.created }}</a></li>
+                                            <li><a href="#">{{ article.comments.count }} Comment</a></li>
+                                        </ul>
+                                        <p>{{ article.body }}</p>
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <ul class="post-tags">
+                                                            <li><a
+                                                                   onclick="like('{{ article.slug }}' , '{{ article.id }}')"
+                                                                   style="font-size: large">
+                                                                    <i id="like" class=" {% if is_liked %}fa fa-heart{% else %}fa fa-heart-o{% endif %}"></i><span
+                                                                    id="count">{{ article.like.all.count }}</span></a>
+                                                            </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-6">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item comments">
+                                    <div class="sidebar-heading">
+                                        <h2>{{ article.comments.count }} Comment</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+
+                                            {% for comment in article.comments.all %}
+                                                {% if comment.parent == None %}
+
+                                                    <li>
+                                                        <div class="author-thumb">
+                                                            <img src="{% static "images/comment-author-01.jpg" %}"
+                                                                 alt="">
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ comment.user }}<span>{{ comment.created }}</span>
+                                                            </h4>
+                                                            <p>{{ comment.body }}</p>
+                                                            <button onclick="set_value({{ comment.id }})"
+                                                                    class="btn btn-outline-primary">reply
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                {% endif %}
+                                                {% for reply in comment.replied.all %}
+                                                    <li class="replied">
+                                                        <div class="author-thumb">
+                                                            {% if comment.user.profile.image %}
+                                                                <img src="{{ comment.user.profile.image.url }}"
+                                                                     alt="">
+                                                            {% else %}
+                                                                <img src="{% static "images/Ra.png" %}"
+                                                                     alt="">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ reply.user }}<span>{{ reply.created }}</span></h4>
+                                                            <p>{{ reply.body }}</p>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endfor %}
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item submit-comment">
+
+                                    <div class="content">
+                                        <form id="comment" action="#" method="post">
+                                            {% csrf_token %}
+                                            {% if request.user.is_authenticated %}
+                                                <div class="sidebar-heading">
+                                                    <h2>Your comment</h2>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <input type="hidden" name="parent_id" id="parent_id" value="">
+                                                        <fieldset>
+                                                    <textarea name="body" rows="6" id="body"
+                                                              placeholder="Type your comment" required=""></textarea>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <button type="submit" id="form-submit" class="main-button">
+                                                                Submit
+                                                            </button>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include "includes/sidebar.html" %}
+            </div>
+        </div>
+    </section>
+    <script>
+        function set_value(id) {
+            document.getElementById('parent_id').value = id
+            window.location.href = '#body'
+        }
+
+    </script>
+{% endblock %}
+
+
+

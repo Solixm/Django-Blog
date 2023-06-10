@@ -1,0 +1,42 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% include "includes/head_references.html" %}
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- Header -->
+{% include "includes/header.html" %}
+
+{% block contact %}
+
+
+{% endblock %}
+
+{% block detail %}
+{% endblock %}
+
+
+
+{% include "includes/footer.html" %}
+
+<!-- Bootstrap core JavaScript -->
+{% include "includes/footer_references.html" %}
+
+</body>
+</html>
